@@ -1,1 +1,19 @@
+.board {
+  max-width: 600px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  background: black;
+}
 
+.board .cell {
+  background: white;
+  height: 200px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 56px;
+}
+
+.board .cell:hover {
+  background: lightgray;
+}

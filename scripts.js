@@ -2,8 +2,8 @@
 
 const STATUS = {
   ON_GOING: "On Going",
-  PLAYER_1_WON: "Player 1 Won!",
-  PLAYER_2_WON: "Player 2 Won!",
+  PLAYER_0_WON: "Player 1 Won!",
+  PLAYER_1_WON: "Player 2 Won!",
   TIED: "Tied!",
 }
 
@@ -34,6 +34,10 @@ class TicTacToe {
     this.checkColumns(this.board)
     this.checkDiagonals(this.board)
     if (this.moveCount >= maxMouveCount) this.status = STATUS.TIED
+
+    if (this.status !== STATUS.ON_GOING) {
+      alert(this.status)
+    }
   }
 
   checkRows(board) {
@@ -46,7 +50,7 @@ class TicTacToe {
   }
 
   checkColumns(board) {
-    const transposedMatrix = board.map((row, index) =>
+    const transposedMatrix = board.map((_, index) =>
       this.board.map((col) => col[index])
     )
 
@@ -64,11 +68,21 @@ class TicTacToe {
     }
   }
 
+  updateButtonContent(row, column) {
+    const button = document.querySelector(
+      `.board [data-row="${row}"][data-column="${column}"]`
+    )
+
+    button.innerHTML = this.currentPlayer === 0 ? "O" : "X"
+  }
+
   move(row, column) {
+    console.log(row, column)
     if (this.checkEmptyCell(row, column)) {
       this.board[row][column] = this.currentPlayer
-
+      this.updateButtonContent(row, column)
       this.checkGame()
+      this.changePlayer()
       return
     }
 
@@ -77,6 +91,13 @@ class TicTacToe {
 }
 
 const game = new TicTacToe(3)
-game.move(0, 2) // first player
-game.move(1, 1) // second player
-game.move(2, 0) // second player
+const cells = document.querySelectorAll(".board .cell")
+if (cells.length) {
+  cells.forEach((cell) =>
+    cell.addEventListener("click", () => {
+      const row = cell.getAttribute("data-row")
+      const col = cell.getAttribute("data-column")
+      game.move(row, col)
+    })
+  )
+}
